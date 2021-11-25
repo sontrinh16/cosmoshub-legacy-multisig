@@ -78,8 +78,6 @@ class MultiSigForm extends React.Component {
         //   throw new Error("Invalid Secp256k1 pubkey");
         // }
 
-        console.log("address = " + address)
-
         const pubkey = await this.getPubkeyFromNode(address);
         const { pubkeys } = this.state;
         pubkeys[index].compressedPubkey = pubkey;
@@ -95,21 +93,10 @@ class MultiSigForm extends React.Component {
   };
 
   handleCreate = async () => {
+    this.setState({ processing: true });
     const compressedPubkeys = this.state.pubkeys.map(
       (item) => item.compressedPubkey
     );
-
-    if (this.state.processing == true) {
-      console.log("loading")
-      window.alert("Processing");
-    }
-
-    if(compressedPubkeys.includes('')){
-      window.alert("Please wait for all query in chain")
-    }
-
-    this.setState({ processing: true });
-
     let multisigAddress;
     try {
       multisigAddress = await createMultisigFromCompressedSecp256k1Pubkeys(
@@ -151,7 +138,7 @@ class MultiSigForm extends React.Component {
                     label="Address"
                     name="address"
                     width="100%"
-                    placeholder="osmo1ya403hmh5ehj2qp6uf0pa672ynjguc7aea4mpk"
+                    placeholder="cosmos1vqpjljwsynsn58dugz0w8ut7kun7t8ls2qkmsq"
                     error={pubkeyGroup.keyError}
                     onBlur={(e) => {
                       this.handleKeyBlur(index, e);

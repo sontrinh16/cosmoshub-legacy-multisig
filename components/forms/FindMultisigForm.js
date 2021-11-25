@@ -5,7 +5,6 @@ import { withRouter } from "next/router";
 import Button from "../inputs/Button";
 import StackableContainer from "../layout/StackableContainer";
 import Input from "../inputs/Input";
-import {checkAddressOsmoValid} from "../../lib/txCheck";
 
 class FindMultisigForm extends React.Component {
   constructor(props) {
@@ -27,14 +26,6 @@ class FindMultisigForm extends React.Component {
   handleSearch = async () => {
     this.setState({ processing: true });
 
-    //basic check
-    if(!checkAddressOsmoValid(this.state.address)){
-      window.alert("Invalid osmosis address format");
-      this.state.address = "";
-      this.setState({ processing: false });
-      return null;
-    }
-
     this.props.router.push(`/multi/${this.state.address}`);
   };
 
@@ -54,7 +45,7 @@ class FindMultisigForm extends React.Component {
             value={this.state.address}
             label="Multisig Address"
             name="address"
-            placeholder="osmo1ya403hmh5ehj2qp6uf0pa672ynjguc7aea4mpk"
+            placeholder="cosmos1vqpjljwsynsn58dugz0w8ut7kun7t8ls2qkmsq"
           />
           <Button
             label="Use this Multisig"

@@ -7,49 +7,37 @@ import { getMultisigAccount } from "../../../lib/multisigHelpers";
 import HashView from "../../../components/dataViews/HashView";
 import MultisigHoldings from "../../../components/dataViews/MultisigHoldings";
 import MultisigMembers from "../../../components/dataViews/MultisigMembers";
-import ComponentsAddress from "../../../components/dataViews/componentsAddress";
 import Page from "../../../components/layout/Page";
 import StackableContainer from "../../../components/layout/StackableContainer";
 import TransactionForm from "../../../components/forms/TransactionForm";
-import TransactionFormAny from "../../../components/forms/TransactionFormAny";
+import TransactionList from "../../../components/dataViews/TransactionList";
 
 export async function getServerSideProps(context) {
   let holdings;
-
   try {
     const client = await StargateClient.connect(
       process.env.NEXT_PUBLIC_NODE_ADDRESS
     );
     const multisigAddress = context.params.address;
-    const accountOnChain = await getMultisigAccount(multisigAddress, client);
-    if(accountOnChain.pubkey.type != "tendermint/PubKeyMultisigThreshold"){
-
-      return {
-        props: { error: "This is not a multisig address", holdings: 0}
-      }
-    }
-    console.log(accountOnChain)
     holdings = await client.getBalance(
       multisigAddress,
       process.env.NEXT_PUBLIC_DENOM
     );
-    console.log(accountOnChain)
+    const accountOnChain = await getMultisigAccount(multisigAddress, client);
+
     return {
-      props: { accountOnChain, holdings: holdings.amount / 1000000, pubkeys: accountOnChain.pubkey.value.pubkeys},
+      props: { accountOnChain, holdings: holdings.amount / 1000000 },
     };
   } catch (error) {
     console.log(error);
     return {
-      props: { error: error.message, holdings: 0},
+      props: { error: error.message, holdings: holdings.amount / 1000000 },
     };
   }
 }
 
 const multipage = (props) => {
   const [showTxForm, setShowTxForm] = useState(false);
-  const [showTxForm1, setShowTxForm1] = useState(false);
-  const [showCreate, setShowCreate] = useState(true);
-
   const router = useRouter();
   const { address } = router.query;
   return (
@@ -61,13 +49,11 @@ const multipage = (props) => {
             <HashView hash={address} />
           </h1>
         </StackableContainer>
-        {props.m}
         {props.error && (
           <StackableContainer>
             <div className="multisig-error">
-              <p>Error: {props.error} !!!!</p>
               <p>
-                This multisig address's pubkeys are INVALID or UNAVAILABLE, and so it
+                This multisig address's pubkeys are not available, and so it
                 cannot be used with this tool.
               </p>
               <p>
@@ -79,14 +65,6 @@ const multipage = (props) => {
             </div>
           </StackableContainer>
         )}
-        <br/>
-        <div>
-          <ComponentsAddress pubkeys = {props.pubkeys} />
-        </div>
-        <br/>
-        <div>
-          <MultisigHoldings holdings={props.holdings} />
-        </div>
         {showTxForm ? (
           <TransactionForm
             address={address}
@@ -94,31 +72,16 @@ const multipage = (props) => {
             holdings={props.holdings}
             closeForm={() => {
               setShowTxForm(false);
-              setShowCreate(true);
             }}
           />
         ) : (
-          <div></div>
-        )}
-        {showTxForm1 ? (
-          <TransactionFormAny
-            address={address}
-            accountOnChain={props.accountOnChain}
-            holdings={props.holdings}
-            closeForm={() => {
-              setShowTxForm1(false);
-              setShowCreate(true);
-            }}
-          />
-        ) : (
-          <div></div>
-        )}
-
-        {showCreate ? (
           <div className="interfaces">
             <div className="col-1">
+              <MultisigHoldings holdings={props.holdings} />
+            </div>
+            <div className="col-2">
               <StackableContainer lessPadding>
-                <h2>New Send transaction</h2>
+                <h2>New transaction</h2>
                 <p>
                   Once a transaction is created, it can be signed by the
                   multisig members, and then broadcast.
@@ -127,30 +90,11 @@ const multipage = (props) => {
                   label="Create Transaction"
                   onClick={() => {
                     setShowTxForm(true);
-                    setShowCreate(false);
-                  }}
-                />
-              </StackableContainer>
-            </div>
-            <div className="col-2">
-              <StackableContainer lessPadding>
-                <h2>Import transaction</h2>
-                <p>
-                  Import an already generated transaction
-                </p>
-                <br/>
-                <Button
-                  label="Import Transaction"
-                  onClick={() => {
-                    setShowTxForm1(true);
-                    setShowCreate(false);
                   }}
                 />
               </StackableContainer>
             </div>
           </div>
-        ):(
-          <div></div>
         )}
       </StackableContainer>
       <style jsx>{`

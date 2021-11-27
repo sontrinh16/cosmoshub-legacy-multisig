@@ -106,9 +106,15 @@ class MultiSigForm extends React.Component {
 
     if(compressedPubkeys.includes('')){
       window.alert("Please wait for all query in chain")
+      return null;
     }
 
     this.setState({ processing: true });
+
+    if(new Set(compressedPubkeys).size !== compressedPubkeys.length){
+      window.alert("Duplicate Keys found. Please check again !");
+      return null;
+    }
 
     let multisigAddress;
     try {

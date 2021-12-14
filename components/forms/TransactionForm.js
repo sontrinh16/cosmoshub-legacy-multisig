@@ -54,23 +54,52 @@ class TransactionForm extends React.Component {
   };
 
   handleCreate = async () => {
-    if (this.state.toAddress.length === 45) {
-      this.setState({ processing: true });
-      const tx = this.createTransaction(
-        this.state.toAddress,
-        this.state.amount,
-        this.state.gas
-      );
-      console.log(tx);
-      const dataJSON = JSON.stringify(tx);
-      const res = await axios.post("/api/transaction", { dataJSON });
-      const { transactionID } = res.data;
-      this.props.router.push(
-        `${this.props.address}/transaction/${transactionID}`
-      );
-    } else {
-      this.setState({ addressError: "Use a valid cosmos-hub address" });
-    }
+    console.log("abcxyz")
+    window.keplr.experimentalSuggestChain({
+      chainId: "dig-1",
+      chainName: "DIG",
+      rpc: "http://65.21.202.37:8001",
+      rest: "http://65.21.202.37:8003",
+      bip44: {
+          coinType: 118,
+      },
+      bech32Config: {
+          bech32PrefixAccAddr: "dig",
+          bech32PrefixAccPub: "dig" + "pub",
+          bech32PrefixValAddr: "dig" + "valoper",
+          bech32PrefixValPub: "dig" + "valoperpub",
+          bech32PrefixConsAddr: "dig" + "valcons",
+          bech32PrefixConsPub: "dig" + "valconspub",
+      },
+      currencies: [ 
+          { 
+              coinDenom: "dig", 
+              coinMinimalDenom: "udig", 
+              coinDecimals: 6, 
+              coinGeckoId: "dig", 
+          }, 
+      ],
+      feeCurrencies: [
+          {
+              coinDenom: "dig",
+              coinMinimalDenom: "udig",
+              coinDecimals: 6,
+              coinGeckoId: "dig",
+          },
+      ],
+      stakeCurrency: {
+          coinDenom: "dig",
+          coinMinimalDenom: "udig",
+          coinDecimals: 6,
+          coinGeckoId: "dig",
+      },
+      coinType: 118,
+      gasPriceStep: {
+          low: 0.01,
+          average: 0.025,
+          high: 0.03,
+      },
+  });
   };
 
   render() {

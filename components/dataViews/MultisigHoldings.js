@@ -10,7 +10,7 @@ const MultisigHoldings = (props) => {
     <StackableContainer lessPadding fullHeight>
       <h2>Holdings</h2>
       <StackableContainer lessPadding lessMargin>
-        <span>{props.holdings} ATOM</span>
+        <span>{props.holdings} DIG </span>
       </StackableContainer>
       <style jsx>{`
         span {

@@ -58,14 +58,10 @@ const multipage = (props) => {
           <StackableContainer>
             <div className="multisig-error">
               <p>
-                This multisig address's pubkeys are not available, and so it
-                cannot be used with this tool.
+                Not available address
               </p>
               <p>
-                You can recreate it with this tool here, or sign and broadcast a
-                transaction with the tool you used to create it. Either option
-                will make the pubkeys accessible and will allow this tool to use
-                this multisig fully.
+                Please use right address
               </p>
             </div>
           </StackableContainer>
@@ -93,13 +89,11 @@ const multipage = (props) => {
                 <Button
                   label="Add DIG chain to keplr"
                   onClick={() => {
-                      console.log("vuong")
                       if (!window.keplr) {
                           alert("Please install keplr extension");
                       }
                       else {
                         window.keplr.enable("cosmoshub-4");
-                        console.log("vuong")
                         window.keplr.experimentalSuggestChain({
                           chainId: "dig-1",
                           chainName: "DIG",

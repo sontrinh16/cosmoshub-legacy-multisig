@@ -81,69 +81,6 @@ const multipage = (props) => {
               <MultisigHoldings holdings={props.holdings} />
             </div>
             <div className="col-2">
-              <StackableContainer lessPadding>
-                <h2>ADD</h2>
-                <p>
-                Add DIG chain to keplr
-                </p>
-                <Button
-                  label="Add DIG chain to keplr"
-                  onClick={() => {
-                      if (!window.keplr) {
-                          alert("Please install keplr extension");
-                      }
-                      else {
-                        window.keplr.enable("cosmoshub-4");
-                        window.keplr.experimentalSuggestChain({
-                          chainId: "dig-1",
-                          chainName: "DIG",
-                          rpc: "http://65.21.202.37:8001",
-                          rest: "http://65.21.202.37:8003",
-                          bip44: {
-                              coinType: 118,
-                          },
-                          bech32Config: {
-                              bech32PrefixAccAddr: "dig",
-                              bech32PrefixAccPub: "dig" + "pub",
-                              bech32PrefixValAddr: "dig" + "valoper",
-                              bech32PrefixValPub: "dig" + "valoperpub",
-                              bech32PrefixConsAddr: "dig" + "valcons",
-                              bech32PrefixConsPub: "dig" + "valconspub",
-                          },
-                          currencies: [ 
-                              { 
-                                  coinDenom: "dig", 
-                                  coinMinimalDenom: "udig", 
-                                  coinDecimals: 6, 
-                                  coinGeckoId: "dig", 
-                              }, 
-                          ],
-                          feeCurrencies: [
-                              {
-                                  coinDenom: "dig",
-                                  coinMinimalDenom: "udig",
-                                  coinDecimals: 6,
-                                  coinGeckoId: "dig",
-                              },
-                          ],
-                          stakeCurrency: {
-                              coinDenom: "dig",
-                              coinMinimalDenom: "udig",
-                              coinDecimals: 6,
-                              coinGeckoId: "dig",
-                          },
-                          coinType: 118,
-                          gasPriceStep: {
-                              low: 0.01,
-                              average: 0.025,
-                              high: 0.03,
-                          },
-                      });                    
-                  }
-                  
-                  }}
-                />
-              </StackableContainer>
             </div>
           </div>
         )}

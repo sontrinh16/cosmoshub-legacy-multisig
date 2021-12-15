@@ -20,15 +20,16 @@ export async function getServerSideProps(context) {
     const client = await StargateClient.connect(
       process.env.NEXT_PUBLIC_NODE_ADDRESS
     );
+
     const multisigAddress = context.params.address;
     const accountOnChain = await getMultisigAccount(multisigAddress, client);
-    if(accountOnChain.pubkey.type != "tendermint/PubKeyMultisigThreshold"){
 
+    if(accountOnChain.pubkey.type != "tendermint/PubKeyMultisigThreshold"){
       return {
         props: { error: "This is not a multisig address", holdings: 0}
       }
     }
-    console.log(accountOnChain)
+
     holdings = await client.getBalance(
       multisigAddress,
       process.env.NEXT_PUBLIC_DENOM
@@ -38,7 +39,7 @@ export async function getServerSideProps(context) {
       props: { accountOnChain, holdings: holdings.amount / 1000000, pubkeys: accountOnChain.pubkey.value.pubkeys},
     };
   } catch (error) {
-    console.log(error);
+    console.log(error.message)
     return {
       props: { error: error.message, holdings: 0},
     };
@@ -52,6 +53,13 @@ const multipage = (props) => {
 
   const router = useRouter();
   const { address } = router.query;
+
+  if(props.error === "Bad status on response: 502") {
+    return (
+      <p> Public node {process.env.NEXT_PUBLIC_NODE_ADDRESS} is down </p>
+    )
+  }
+
   return (
     <Page>
       <StackableContainer base>

@@ -50,31 +50,31 @@ const JsonCosmosTransaction = (props) => {
   return (
 
     <StackableContainer lessPadding fullHeight>
-      {showCreate ? (  
-         <StackableContainer lessPadding fullHeight>
-          <Button label="Get Transaction" onClick={() => {
-                    setShowTxForm(true);
-                    setShowCreate(false);
-                  }} />
-         </StackableContainer>) : null  }
-      { showTxForm ? (
-      <div>
-        <div className="hash-view">
-          <h2>JsonCosmosTransaction</h2>
-          <div className="button-view">
-            <CopyAndPaste copyText={JSON.stringify(convertKelprTransaction(props.tx), null, 1)} />
-          </div>
-        </div>
-        <StackableContainer lessPadding lessMargin className="context">
-          {props.tx.msgs && (
-            <div className="context"><pre>{JSON.stringify(convertKelprTransaction(props.tx), null, 1)}</pre></div>
-          )}
-          <button className="remove" onClick={() => {
-                    setShowTxForm(false);
-                    setShowCreate(true);
-                  }}>
-           ✕
-          </button>
+//       {showCreate ? (  
+//          <StackableContainer lessPadding fullHeight>
+//           <Button label="Get Transaction" onClick={() => {
+//                     setShowTxForm(true);
+//                     setShowCreate(false);
+//                   }} />
+//          </StackableContainer>) : null  }
+//       { showTxForm ? (
+//       <div>
+//         <div className="hash-view">
+//           <h2>JsonCosmosTransaction</h2>
+//           <div className="button-view">
+//             <CopyAndPaste copyText={JSON.stringify(convertKelprTransaction(props.tx), null, 1)} />
+//           </div>
+//         </div>
+//         <StackableContainer lessPadding lessMargin className="context">
+//           {props.tx.msgs && (
+//             <div className="context"><pre>{JSON.stringify(convertKelprTransaction(props.tx), null, 1)}</pre></div>
+//           )}
+//           <button className="remove" onClick={() => {
+//                     setShowTxForm(false);
+//                     setShowCreate(true);
+//                   }}>
+//            ✕
+//           </button>
     </StackableContainer>
     </div>) : null }  
         <style jsx>{`
